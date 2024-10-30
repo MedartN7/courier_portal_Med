@@ -73,6 +73,13 @@
         "icon": "bi bi-envelope-fill h4",
         "permission": "all"
     },
+    "businessCard" : {
+        "name" : "nav_menu_business_card",
+        "route_name" : "businessCard",
+        "type" : "standard",
+        "icon": "bi bi-credit-card-2-front-fill h4",
+        "permission": "all"
+    },
     "help" : {
         "name" : "nav_menu_help",
         "route_name" : "help",

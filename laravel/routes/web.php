@@ -12,6 +12,7 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\CustomUserController;
 use App\Http\Controllers\JsonParserController;
 use App\Http\Controllers\CookiesController;
+use App\Http\Controllers\BusinessCardController;
 
 //debug_print_backtrace(); exit();
 
@@ -31,6 +32,7 @@ use App\Http\Controllers\CookiesController;
     Route::get('/', function () { return view('welcome'); } )->name('main');
     Route::get('/rodo/rules', function () { return view('rodo'); })->name('rodo');
     Route::get('/donate', function () { return view('donations'); })->name('donate');
+    Route::get('/business/card', [ BusinessCardController::class, 'show' ] )->name('businessCard');
 
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/contact', function () { return view('contact'); } )->name('contact');
