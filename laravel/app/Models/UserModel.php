@@ -26,10 +26,7 @@ class UserModel extends Model
         return $this->hasOne( UserCompany::class, 'author' );
     }
 
-    public function delete() {
-        $this->userAnnouncement()->delete();
-        $this->courierAnnouncement()->delete();
-        $this->company()->delete();
-        return parent::delete();
+    public function consents() {
+        return $this->hasOne( Consents::class, 'author' );
     }
 }

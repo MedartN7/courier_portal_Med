@@ -89,6 +89,16 @@
                                 <a href="{{ route('rodo') }}" class="ml-2" target="_blank" rel="noopener noreferrer">{{ __( 'base.accept_rodo_details' ) }}</a>
                             </div>
                         </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4"></div>
+                            <div class="col-md-6 form-inline">
+                                <input class="form-check-input" type="checkbox" id="marketingCheckbox" name="marketingCheckbox" {{ old('marketingCheckbox') ? 'checked' : '' }}>
+                                <label class="form-check-label ml-2" for="marketingCheckbox">
+                                    {{ __( 'base.accept_marketing' ) }}
+                                </label>
+                                <a href="{{ route('rodo') }}" class="ml-2" target="_blank" rel="noopener noreferrer">{{ __( 'base.accept_rodo_details' ) }}</a>
+                            </div>
+                        </div>
 
 
 
