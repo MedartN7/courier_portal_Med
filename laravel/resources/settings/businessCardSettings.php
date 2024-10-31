@@ -9,7 +9,7 @@ return [
             "name" => 'APB LOGISTICS', // max 25 znaków
             "pictureName" => 'apb.png', // zdjecie trzeba umieścić w public_html/courier_portal/laravel/public/images/businessCardImages logo najlepiej prezentuje sie jako kwadrat np: 100x100 pikseli
             "tel" => '+48 513 326 403', 
-            "email" => 'a.pagel@apblogistics.eu', 
+            "email" => 'biuro@apblogistics.eu', 
             "web" => 'http://apblogistics.eu', 
             "description" => 'Transport krajowy, zagraniczny, wynajem busów', // max 100 znaków 
         ],
