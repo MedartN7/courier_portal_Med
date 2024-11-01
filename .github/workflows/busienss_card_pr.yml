@@ -1,25 +1,29 @@
 name: Create Pull Request
+
 on:
   push:
     branches:
       - BusinessCards
+
 jobs:
-  create-pull-request:
+  create_pull_request:
     runs-on: ubuntu-latest
+    
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v2
-      
+        
       - name: Create Pull Request
         id: create_pr
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          title: 'Automatyczny pull request z BusinessCards'
-          body: 'Ten pull request został automatycznie utworzony na podstawie zmian wprowadzonych w branchu BusinessCards.'
-          head: BusinessCards
+          title: 'Automated PR from BusinessCards'
+          body: 'This is an automated pull request from the BusinessCards branch.'
           base: master
-      
+          head: BusinessCards
+          draft: false
+
       - name: Print PR Information
         env:
           PR_NUMBER: ${{ steps.create_pr.outputs.pull-request-number }}
