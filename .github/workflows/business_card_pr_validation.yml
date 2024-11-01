@@ -1,15 +1,15 @@
-name: Business Card Validation
+name: Business Card Validation and Auto Pull Request
 
 on:
   push:
     branches:
       - BusinessCards
-  pull_request:
-    branches:
-      - master
+    paths:
+      - 'laravel/public/images/businessCardImages/**'
+      - 'laravel/resources/settings/businessCardSettings.php'
 
 jobs:
-  validate-business-cards:
+  validate-and-create-pr:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
@@ -47,23 +47,18 @@ jobs:
       run: |
         PHP_FILE="laravel/resources/settings/businessCardSettings.php"
         
-        # Syntax check
         php -l "$PHP_FILE"
         
-        # Custom validation script
         php << 'EOF'
         <?php
         $settings = require '$PHP_FILE';
         
-        // Validate settings structure
         if (!isset($settings['settings']) || !isset($settings['elements'])) {
             echo "Invalid settings structure\n";
             exit(1);
         }
         
-        // Validate each element
         foreach ($settings['elements'] as $key => $element) {
-            // Check if required keys exist
             $requiredKeys = ['name', 'pictureName', 'tel', 'email', 'web', 'description'];
             foreach ($requiredKeys as $requiredKey) {
                 if (!array_key_exists($requiredKey, $element)) {
@@ -72,19 +67,16 @@ jobs:
                 }
             }
             
-            // Validate name length
             if (strlen($element['name']) > 25) {
                 echo "Name in $key exceeds 25 characters\n";
                 exit(1);
             }
             
-            // Validate description length
             if (strlen($element['description']) > 100) {
                 echo "Description in $key exceeds 100 characters\n";
                 exit(1);
             }
             
-            // Validate image exists
             $imagePath = "laravel/public/images/businessCardImages/{$element['pictureName']}";
             if (!file_exists($imagePath)) {
                 echo "Image {$element['pictureName']} not found for $key\n";
