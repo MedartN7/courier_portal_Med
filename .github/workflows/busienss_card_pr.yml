@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - BusinessCards
-
 jobs:
   create-pull-request:
     runs-on: ubuntu-latest
@@ -23,20 +22,17 @@ jobs:
       
       - name: Get Pull Request URL
         id: get_pr_url
-        uses: actions/github-script@v4
+        uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const pullRequests = await github.pulls.list({
+            const pullRequests = await github.rest.pulls.list({
               owner: context.repo.owner,
               repo: context.repo.repo,
               head: `${context.repo.owner}:BusinessCards`,
-              state: 'open',
+              state: 'open'
             });
-            if (pullRequests.data.length > 0) {
-              return pullRequests.data[0].html_url;
-            }
-            return null;
+            return pullRequests.data.length > 0 ? pullRequests.data[0].html_url : null;
       
       - name: Output Pull Request Link
         run: echo "Pull Request URL: ${{ steps.get_pr_url.outputs.result }}"
