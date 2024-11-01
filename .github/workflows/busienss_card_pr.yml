@@ -20,19 +20,10 @@ jobs:
           head: BusinessCards
           base: master
       
-      - name: Get Pull Request URL
-        id: get_pr_url
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const pullRequests = await github.rest.pulls.list({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              head: `${context.repo.owner}:BusinessCards`,
-              state: 'open'
-            });
-            return pullRequests.data.length > 0 ? pullRequests.data[0].html_url : null;
-      
-      - name: Output Pull Request Link
-        run: echo "Pull Request URL: ${{ steps.get_pr_url.outputs.result }}"
+      - name: Print PR Information
+        env:
+          PR_NUMBER: ${{ steps.create_pr.outputs.pull-request-number }}
+          PR_URL: ${{ steps.create_pr.outputs.pull-request-url }}
+        run: |
+          echo "Pull Request Number: $PR_NUMBER"
+          echo "Pull Request URL: $PR_URL"
