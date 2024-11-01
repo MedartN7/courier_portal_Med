@@ -1,79 +1,103 @@
-name: Business Card PR Validation
+name: Business Card Validation
 
 on:
   push:
     branches:
       - BusinessCards
+  pull_request:
+    branches:
+      - master
 
 jobs:
-  validate-and-pr:
+  validate-business-cards:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      # Krok 3: Sprawdzenie, czy nowe pliki i edycje są w katalogu `businessCardImages` oraz mają prawidłowy format.
-      - name: Validate file locations and formats
-        run: |
-          ALLOWED_FORMATS=("jpg" "jpeg" "png" "gif" "webp" "bmp")
-          for file in $(git diff --name-only HEAD^ HEAD); do
-            if [[ "$file" == *"businessCardImages"* ]]; then
-              extension="${file##*.}"
-              if [[ ! " ${ALLOWED_FORMATS[@]} " =~ " ${extension,,} " ]]; then
-                echo "Błąd: ${file} ma niedozwolony format. Dopuszczalne: ${ALLOWED_FORMATS[*]}"
-                exit 1
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.1'
+
+    - name: Validate Image Files
+      run: |
+        ALLOWED_EXTENSIONS=("jpg" "jpeg" "png" "webp" "gif" "bmp" "tiff" "svg")
+        IMAGES_DIR="laravel/public/images/businessCardImages"
+        
+        for file in "$IMAGES_DIR"/*; do
+          if [ -f "$file" ]; then
+            ext=$(echo "${file##*.}" | tr '[:upper:]' '[:lower:]')
+            valid=0
+            for allowed in "${ALLOWED_EXTENSIONS[@]}"; do
+              if [ "$ext" == "$allowed" ]; then
+                valid=1
+                break
               fi
-            elif [[ "$file" != "laravel/resources/settings/businessCardSettings.php" ]]; then
-              echo "Błąd: Zmiany poza katalogiem 'businessCardImages' są niedozwolone."
+            done
+            
+            if [ $valid -eq 0 ]; then
+              echo "Invalid file extension: $file"
               exit 1
             fi
-          done
+          fi
+        done
 
-      # Krok 4: Walidacja składni PHP w pliku `businessCardSettings.php`
-      - name: Validate PHP syntax in businessCardSettings.php
-        run: |
-          php -l laravel/resources/settings/businessCardSettings.php
-          
-      # Krok 5: Walidacja struktury pliku `businessCardSettings.php`
-      - name: Validate businessCardSettings.php structure
-        run: |
-          php -r '
-          $file = "laravel/resources/settings/businessCardSettings.php";
-          $data = include $file;
-          
-          if (!isset($data["elements"])) {
-              echo "Błąd: Brak sekcji elements.";
-              exit(1);
-          }
-          
-          foreach ($data["elements"] as $key => $element) {
-              if (!preg_match("/^ele[0-9]+$/", $key)) {
-                  echo "Błąd: Element klucza \"$key\" musi być w formacie ele1, ele2, ...";
-                  exit(1);
-              }
-              $fields = ["name", "pictureName", "tel", "email", "web", "description"];
-              foreach ($fields as $field) {
-                  if (!array_key_exists($field, $element)) {
-                      echo "Błąd: Element \"$key\" musi zawierać pole \"$field\".";
-                      exit(1);
-                  }
-              }
-              if (strlen($element["name"]) > 25) {
-                  echo "Błąd: Pole 'name' w elemencie \"$key\" przekracza 25 znaków.";
-                  exit(1);
-              }
-              if (strlen($element["description"]) > 100) {
-                  echo "Błąd: Pole 'description' w elemencie \"$key\" przekracza 100 znaków.";
-                  exit(1);
-              }
-          }
-          '
+    - name: Validate Business Card Settings
+      run: |
+        PHP_FILE="laravel/resources/settings/businessCardSettings.php"
+        
+        # Syntax check
+        php -l "$PHP_FILE"
+        
+        # Custom validation script
+        php << 'EOF'
+        <?php
+        $settings = require '$PHP_FILE';
+        
+        // Validate settings structure
+        if (!isset($settings['settings']) || !isset($settings['elements'])) {
+            echo "Invalid settings structure\n";
+            exit(1);
+        }
+        
+        // Validate each element
+        foreach ($settings['elements'] as $key => $element) {
+            // Check if required keys exist
+            $requiredKeys = ['name', 'pictureName', 'tel', 'email', 'web', 'description'];
+            foreach ($requiredKeys as $requiredKey) {
+                if (!array_key_exists($requiredKey, $element)) {
+                    echo "Missing key $requiredKey in $key\n";
+                    exit(1);
+                }
+            }
+            
+            // Validate name length
+            if (strlen($element['name']) > 25) {
+                echo "Name in $key exceeds 25 characters\n";
+                exit(1);
+            }
+            
+            // Validate description length
+            if (strlen($element['description']) > 100) {
+                echo "Description in $key exceeds 100 characters\n";
+                exit(1);
+            }
+            
+            // Validate image exists
+            $imagePath = "laravel/public/images/businessCardImages/{$element['pictureName']}";
+            if (!file_exists($imagePath)) {
+                echo "Image {$element['pictureName']} not found for $key\n";
+                exit(1);
+            }
+        }
+        EOF
 
-      # Krok 6: Tworzenie pull requesta, jeśli walidacje przejdą pomyślnie
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v4
-        with:
-          branch: master
-          title: "Automated PR from BusinessCards branch"
-          body: "Zmiany automatycznie zatwierdzone na podstawie walidacji."
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        branch: BusinessCards
+        base: master
+        title: Automatic Pull Request from BusinessCards
+        body: Automated pull request after validation checks
