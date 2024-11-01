@@ -23,7 +23,7 @@ jobs:
           base: master
 
       - name: Get Pull Request URL
-        id: pr
+        id: get_pr_url
         uses: actions/github-script@v4
         with:
           script: |
@@ -39,4 +39,4 @@ jobs:
             return null;
 
       - name: Output Pull Request Link
-        run: echo "Pull Request URL: ${{ steps.pr.outputs.result }}"
+        run: echo "Pull Request URL: ${{ steps.get_pr_url.outputs.result }}"
