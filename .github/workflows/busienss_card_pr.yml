@@ -1,5 +1,4 @@
 name: Create Pull Request
-
 on:
   push:
     branches:
@@ -11,7 +10,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-
+      
       - name: Create Pull Request
         id: create_pr
         uses: peter-evans/create-pull-request@v3
@@ -21,11 +20,12 @@ jobs:
           body: 'Ten pull request został automatycznie utworzony na podstawie zmian wprowadzonych w branchu BusinessCards.'
           head: BusinessCards
           base: master
-
+      
       - name: Get Pull Request URL
         id: get_pr_url
         uses: actions/github-script@v4
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const pullRequests = await github.pulls.list({
               owner: context.repo.owner,
@@ -37,6 +37,6 @@ jobs:
               return pullRequests.data[0].html_url;
             }
             return null;
-
+      
       - name: Output Pull Request Link
         run: echo "Pull Request URL: ${{ steps.get_pr_url.outputs.result }}"
