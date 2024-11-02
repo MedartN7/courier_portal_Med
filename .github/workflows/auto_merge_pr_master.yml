@@ -18,7 +18,7 @@ jobs:
 
       - name: Debug Permissions
         run: |
-          echo "Testing token permissions for API access"
+          echo "Testowanie uprawnień tokena dla dostępu API"
           curl -H "Authorization: token ${{ secrets.MY_PERSONAL_TOKEN_COURIER_PORTAL }}" \
                -H "Accept: application/vnd.github.v3+json" \
                https://api.github.com/
@@ -39,22 +39,14 @@ jobs:
                   pull_number,
                   merge_method: 'merge'
                 });
-                console.log(`Successfully merged PR #${pull_number}`);
+                console.log(`Pomyślnie połączono PR #${pull_number}`);
               } catch (error) {
-                console.error('Error merging PR:', error);
+                console.error('Błąd podczas łączenia PR:', error);
                 core.setFailed(error.message);
               }
             } else {
-              console.log('Not merging PR because it is not targeting master.');
+              console.log('Nie łączę PR, ponieważ nie jest skierowany do mastera.');
             }
-
-      - name: Debug API Response
-        if: always()
-        run: |
-          echo "Testing API access to specific PR:"
-          curl -H "Authorization: token ${{ secrets.MY_PERSONAL_TOKEN_COURIER_PORTAL }}" \
-               -H "Accept: application/vnd.github.v3+json" \
-               https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}
 
   deploy:
     needs: auto_merge
@@ -65,34 +57,33 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-      
-      - name: Add SSH Host to Known Hosts
+      - name: Instalacja klucza SSH
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          eval $(ssh-agent -s)
+          ssh-add ~/.ssh/deploy_key
 
-      - name: Test SSH Connection
+      - name: Dodanie known hosts
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }} 'echo "SSH connection successful"'
-      
-      - name: Deploy to Server
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SSH_PORT }}
-          script: |
-            cd ./domains/kurierportal.cfolks.pl/public_html/courier_portal/laravel/
-            git checkout master
+          echo "${{ secrets.SSH_HOST }} ssh-ed25519 SHA256:Qgvy72Ewn07hlW7c7TTvU/+Fft89WE7K+yVYDWA4b8M" >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
+      - name: Test połączenia SSH
+        run: |
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'echo "Połączenie SSH udane"'
+
+      - name: Wdrożenie na serwer
+        run: |
+          ssh -i ~/.ssh/deploy_key -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} '
+            cd ./domains/kurierportal.cfolks.pl/public_html/courier_portal/laravel/ && \
+            git checkout master && \
             git pull origin master
+          '
 
-      - name: Debug SSH Key Error
-        if: failure()
+      - name: Czyszczenie
+        if: always()
         run: |
-          echo "SSH Key might be causing issues, running debug information"
-          ssh -v ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }}
+          rm -f ~/.ssh/deploy_key
+          eval $(ssh-agent -k)
