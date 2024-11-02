@@ -67,8 +67,9 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cd /path/to/your/project  # Zmień na właściwą ścieżkę do projektu
+            cd /var/www/dev  # Zmień na właściwą ścieżkę do projektu
             git checkout master
             git pull origin master
