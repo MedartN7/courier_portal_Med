@@ -69,6 +69,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cd /var/www/dev  # Zmień na właściwą ścieżkę do projektu
+            cd ./domains/kurierportal.cfolks.pl/public_html/courier_portal/laravel/
             git checkout master
             git pull origin master
