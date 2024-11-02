@@ -21,6 +21,6 @@ jobs:
 
       - name: Create Pull Request
         run: |
-          gh pr create --base master --head BusinessCards --title "Automated PR from BusinessCards" --body "This is an automated pull request from the BusinessCards branch."
+          gh pr create --base master --head BusinessCards --title "Automatyczny pull request z Wizytówkami" --body "Automatyczny Pull Request"
         env:
           GITHUB_TOKEN: ${{ secrets.MY_PERSONAL_TOKEN_COURIER_PORTAL }}
