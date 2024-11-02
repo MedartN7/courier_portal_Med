@@ -12,4 +12,3 @@ jobs:
     steps:
       - name: List branches
         run: git branch -a
-        
