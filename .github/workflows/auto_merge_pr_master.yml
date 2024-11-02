@@ -1,0 +1,38 @@
+name: Auto Merge Pull Request
+
+on:
+  pull_request:
+    types: [opened, edited]
+
+jobs:
+  auto_merge:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Merge Pull Request
+        uses: actions/github-script@v6
+        with:
+          script: |
+            // Nie musisz ponownie deklarować context i github
+            const pull_number = context.payload.pull_request.number;
+
+            // Sprawdź, czy PR jest dołączony do branch master
+            if (context.payload.pull_request.base.ref === 'master') {
+              const { owner, repo } = context.repo;
+
+              // Akceptuj PR
+              await github.pulls.merge({
+                owner,
+                repo,
+                pull_number,
+                merge_method: 'merge',  // Możesz zmienić na 'squash' lub 'rebase'
+              });
+              console.log(`Merged PR #${pull_number}`);
+            } else {
+              console.log('Not merging PR because it is not targeting master.');
+            }
+        env:
+          GITHUB_TOKEN: ${{ secrets.MY_PERSONAL_TOKEN_COURIER_PORTAL }}

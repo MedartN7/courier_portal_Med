@@ -1,4 +1,4 @@
-name: Create Pull Request
+name: Create or Update Pull Request
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - BusinessCards
 
 jobs:
-  create_pull_request:
+  create_or_update_pr:
     runs-on: ubuntu-latest
     
     steps:
@@ -15,28 +15,25 @@ jobs:
         with:
           fetch-depth: 0  # Pobierz pełną historię commitów
 
-      - name: Fetch all branches
-        run: git fetch --all
-
-      - name: Debug info
+      - name: Install GitHub CLI
         run: |
-          echo "Current branch:"
-          git rev-parse --abbrev-ref HEAD
-          echo "Last commit on master:"
-          git rev-parse origin/master
-          echo "Last commit on BusinessCards:"
-          git rev-parse origin/BusinessCards
+          sudo apt-get install gh
 
-      - name: Show Changes
-        run: git diff origin/master...origin/BusinessCards  # Wyświetl zmiany przed utworzeniem PR
+      - name: Check for existing pull request
+        id: check_pr
+        env:
+          GH_TOKEN: ${{ secrets.MY_PERSONAL_TOKEN_COURIER_PORTAL }} # Użyj swojego tokena
+        run: |
+          pr_number=$(gh pr list --base master --head BusinessCards --json number --jq '.[0].number')
+          echo "PR Number: $pr_number"
+          echo "pr_number=$pr_number" >> $GITHUB_ENV
 
-      - name: Create Pull Request
-        id: create_pr
-        uses: peter-evans/create-pull-request@v7
-        with:
-          token: ${{ secrets.MY_PERSONAL_TOKEN_COURIER_PORTAL }}
-          title: 'Automated PR from BusinessCards'
-          body: 'This is an automated pull request from the BusinessCards branch.'
-          base: master
-          branch: BusinessCards  # Zmiana 'head' na 'branch'
-          draft: false
+      - name: Create or update Pull Request
+        run: |
+          if [ -z "$pr_number" ]; then
+            gh pr create --base master --head BusinessCards --title "Automated PR from BusinessCards" --body "This is an automated pull request from the BusinessCards branch."
+          else
+            gh pr edit "$pr_number" --title "Updated PR from BusinessCards" --body "This PR was updated automatically from the BusinessCards branch."
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.MY_PERSONAL_TOKEN_COURIER_PORTAL }} # Użyj swojego tokena
