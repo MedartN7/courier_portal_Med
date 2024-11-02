@@ -18,14 +18,14 @@ jobs:
       - name: Debug Permissions
         run: |
           echo "Token permissions:"
-          curl -H "Authorization: token ${{ secrets.MY_PERSONAL_TOKEN_COURIER_PORTAL }}" \
+          curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
                -H "Accept: application/vnd.github.v3+json" \
                https://api.github.com/
         
       - name: Merge Pull Request
         uses: actions/github-script@v6
         with:
-          github-token: ${{ secrets.MY_PERSONAL_TOKEN_COURIER_PORTAL }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             if (context.payload.pull_request.base.ref === 'master') {
               const { owner, repo } = context.repo;
@@ -51,6 +51,24 @@ jobs:
         if: always()
         run: |
           echo "Testing API access to specific PR:"
-          curl -H "Authorization: token ${{ secrets.MY_PERSONAL_TOKEN_COURIER_PORTAL }}" \
+          curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
                -H "Accept: application/vnd.github.v3+json" \
                https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}
+
+  deploy:
+    needs: auto_merge
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.base.ref == 'master'
+    
+    steps:
+      - name: Deploy to server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd /path/to/your/project  # Zmień na właściwą ścieżkę do projektu
+            git checkout master
+            git pull origin master
