@@ -10,10 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: List branches
-        run: git branch -a
-
-
       - name: Checkout code
         uses: actions/checkout@v4
         
