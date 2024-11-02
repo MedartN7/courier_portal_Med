@@ -10,8 +10,20 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4  # Klonuje repozytorium do środowiska roboczego
-
       - name: List branches
-        run: git branch -a 
+        run: git branch -a
+
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Create Pull Request
+        id: create_pr
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: 'Automated PR from BusinessCards'
+          body: 'This is an automated pull request from the BusinessCards branch.'
+          base: master
+          branch: BusinessCards  # Zmiana 'head' na 'branch'
+          draft: false
