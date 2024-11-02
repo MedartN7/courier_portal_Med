@@ -8,7 +8,8 @@ on:
 jobs:
   create_pull_request:
     runs-on: ubuntu-latest
-    
+    if: github.ref == 'refs/heads/BusinessCards'  # Warunek, aby zadanie uruchamiało się tylko na branżu BusinessCards
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
