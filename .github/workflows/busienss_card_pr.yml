@@ -10,5 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4  # Klonuje repozytorium do środowiska roboczego
+
       - name: List branches
-        run: git branch -a
+        run: git branch -a 
