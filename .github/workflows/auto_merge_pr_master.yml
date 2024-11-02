@@ -1,4 +1,4 @@
-name: Auto Merge Pull Request
+name: Auto Merge Pull Request and Deploy
 
 on:
   pull_request:
@@ -22,7 +22,7 @@ jobs:
           curl -H "Authorization: token ${{ secrets.MY_PERSONAL_TOKEN_COURIER_PORTAL }}" \
                -H "Accept: application/vnd.github.v3+json" \
                https://api.github.com/
-        
+
       - name: Merge Pull Request
         uses: actions/github-script@v6
         with:
@@ -70,16 +70,16 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
       
-      - name: Add SSH host to known hosts
+      - name: Add SSH Host to Known Hosts
         run: |
           mkdir -p ~/.ssh
           ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
       - name: Test SSH Connection
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/cyberfolks_deploy_rsa ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }} 'echo "SSH connection successful"'
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }} 'echo "SSH connection successful"'
       
-      - name: Deploy to server
+      - name: Deploy to Server
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -95,4 +95,4 @@ jobs:
         if: failure()
         run: |
           echo "SSH Key might be causing issues, running debug information"
-          ssh -v -i ~/.ssh/cyberfolks_deploy_rsa ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }}
+          ssh -v ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }}
