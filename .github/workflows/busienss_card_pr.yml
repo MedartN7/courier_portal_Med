@@ -29,18 +29,14 @@ jobs:
           echo "Status of BusinessCards branch:"
           git status
 
-      - name: Show Changes
-        run: git diff origin/master...origin/BusinessCards  # Wyświetl zmiany przed utworzeniem PR
-
       - name: Create Pull Request
-        id: create_pr
         uses: peter-evans/create-pull-request@v7
         with:
-          token: ${{ secrets.MY_PERSONAL_TOKEN_COURIER_PORTAL }}
-          title: 'Automated PR from BusinessCards'
-          body: 'This is an automated pull request from the BusinessCards branch.'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: Automated PR from BusinessCards
+          body: This is an automated pull request from the BusinessCards branch.
           base: master
-          head: BusinessCards  # Zmiana 'branch' na 'head'
+          branch: BusinessCards  # Upewnij się, że używasz 'branch' zamiast 'head'
           draft: false
-          
+
 
