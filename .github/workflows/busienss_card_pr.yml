@@ -24,10 +24,4 @@ jobs:
           head: BusinessCards
           draft: false
 
-      - name: Print PR Information
-        env:
-          PR_NUMBER: ${{ steps.create_pr.outputs.pull-request-number }}
-          PR_URL: ${{ steps.create_pr.outputs.pull-request-url }}
-        run: |
-          echo "Pull Request Number: $PR_NUMBER"
-          echo "Pull Request URL: $PR_URL"
+      
