@@ -21,8 +21,5 @@ jobs:
           title: 'Automated PR from BusinessCards'
           body: 'This is an automated pull request from the BusinessCards branch.'
           base: master
-          head: BusinessCards
+          branch: BusinessCards  # Zmiana 'head' na 'branch'
           draft: false
-          permissions: |
-            contents: write
-            pull-requests: write
