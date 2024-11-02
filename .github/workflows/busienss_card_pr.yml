@@ -26,6 +26,8 @@ jobs:
           git rev-parse origin/master
           echo "Last commit on BusinessCards:"
           git rev-parse origin/BusinessCards
+          echo "Status of BusinessCards branch:"
+          git status
 
       - name: Show Changes
         run: git diff origin/master...origin/BusinessCards  # Wyświetl zmiany przed utworzeniem PR
@@ -38,5 +40,6 @@ jobs:
           title: 'Automated PR from BusinessCards'
           body: 'This is an automated pull request from the BusinessCards branch.'
           base: master
-          branch: BusinessCards  # Zmiana 'head' na 'branch'
+          head: BusinessCards  # Zmiana 'branch' na 'head'
           draft: false
+
