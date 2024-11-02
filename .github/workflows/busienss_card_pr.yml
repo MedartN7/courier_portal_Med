@@ -24,4 +24,6 @@ jobs:
           head: BusinessCards
           draft: false
 
-      
+      - name: Output PR URL
+        if: steps.create_pr.outputs.pull-request-url # Sprawdzamy, czy URL istnieje
+        run: echo "Pull Request utworzony: ${{ steps.create_pr.outputs.pull-request-url }}" > $GITHUB_ENV
