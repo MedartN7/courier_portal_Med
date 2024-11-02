@@ -16,13 +16,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Debug Permissions
-        run: |
-          echo "Testowanie uprawnień tokena dla dostępu API"
-          curl -H "Authorization: token ${{ secrets.MY_PERSONAL_TOKEN_COURIER_PORTAL }}" \
-               -H "Accept: application/vnd.github.v3+json" \
-               https://api.github.com/
-
       - name: Merge Pull Request
         uses: actions/github-script@v6
         with:
@@ -67,12 +60,7 @@ jobs:
 
       - name: Dodanie known hosts
         run: |
-          echo "${{ secrets.SSH_HOST }} ssh-ed25519 SHA256:Qgvy72Ewn07hlW7c7TTvU/+Fft89WE7K+yVYDWA4b8M" >> ~/.ssh/known_hosts
-          chmod 644 ~/.ssh/known_hosts
-
-      - name: Test połączenia SSH
-        run: |
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'echo "Połączenie SSH udane"'
+          ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
       - name: Wdrożenie na serwer
         run: |
