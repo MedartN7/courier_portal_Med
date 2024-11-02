@@ -18,14 +18,14 @@ jobs:
       - name: Debug Permissions
         run: |
           echo "Token permissions:"
-          curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          curl -H "Authorization: token ${{ secrets.MY_PERSONAL_TOKEN_COURIER_PORTAL }}" \
                -H "Accept: application/vnd.github.v3+json" \
                https://api.github.com/
         
       - name: Merge Pull Request
         uses: actions/github-script@v6
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.MY_PERSONAL_TOKEN_COURIER_PORTAL }}
           script: |
             if (context.payload.pull_request.base.ref === 'master') {
               const { owner, repo } = context.repo;
@@ -51,7 +51,7 @@ jobs:
         if: always()
         run: |
           echo "Testing API access to specific PR:"
-          curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          curl -H "Authorization: token ${{ secrets.MY_PERSONAL_TOKEN_COURIER_PORTAL }}" \
                -H "Accept: application/vnd.github.v3+json" \
                https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}
 
