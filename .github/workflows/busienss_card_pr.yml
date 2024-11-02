@@ -17,7 +17,7 @@ jobs:
         id: create_pr
         uses: peter-evans/create-pull-request@v7
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.MY_PERSONAL_TOKEN_COURIER_PORTAL }}
           title: 'Automated PR from BusinessCards'
           body: 'This is an automated pull request from the BusinessCards branch.'
           base: master
