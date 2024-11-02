@@ -42,4 +42,5 @@ jobs:
           base: master
           head: BusinessCards  # Zmiana 'branch' na 'head'
           draft: false
+          
 
