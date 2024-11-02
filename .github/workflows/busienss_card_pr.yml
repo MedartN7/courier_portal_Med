@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - BusinessCards
-      
-permissions:
-  contents: write # Dodaje uprawnienia zapisu dla tokena
 
 jobs:
   create_pull_request:
@@ -14,11 +11,11 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3 # Aktualizacja do nowszej wersji checkout
+        uses: actions/checkout@v4
         
       - name: Create Pull Request
         id: create_pr
-        uses: peter-evans/create-pull-request@v5 # Aktualizacja do najnowszej wersji create-pull-request
+        uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           title: 'Automated PR from BusinessCards'
@@ -26,4 +23,6 @@ jobs:
           base: master
           head: BusinessCards
           draft: false
-          branch: temp-branch # Utworzenie tymczasowej gałęzi na potrzeby PR
+          permissions: |
+            contents: write
+            pull-requests: write
