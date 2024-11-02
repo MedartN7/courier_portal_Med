@@ -16,12 +16,12 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            // Nie musisz ponownie deklarować context i github
-            const pull_number = context.payload.pull_request.number;
+            const { github, context } = require('@actions/github');
 
             // Sprawdź, czy PR jest dołączony do branch master
             if (context.payload.pull_request.base.ref === 'master') {
               const { owner, repo } = context.repo;
+              const pull_number = context.payload.pull_request.number;
 
               // Akceptuj PR
               await github.pulls.merge({
