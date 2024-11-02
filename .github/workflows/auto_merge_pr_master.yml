@@ -77,7 +77,7 @@ jobs:
 
       - name: Test SSH Connection
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/github_actions_rsa ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }} 'echo "SSH connection successful"'
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/cyberfolks_deploy_rsa ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }} 'echo "SSH connection successful"'
       
       - name: Deploy to server
         uses: appleboy/ssh-action@master
@@ -95,4 +95,4 @@ jobs:
         if: failure()
         run: |
           echo "SSH Key might be causing issues, running debug information"
-          ssh -v -i ~/.ssh/github_actions_rsa ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }}
+          ssh -v -i ~/.ssh/cyberfolks_deploy_rsa ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }}
