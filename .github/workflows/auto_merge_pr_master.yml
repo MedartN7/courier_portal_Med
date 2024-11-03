@@ -1,10 +1,13 @@
 name: Auto Merge Pull Request and Deploy
+
 on:
   pull_request:
     types: [opened, edited]
+
 permissions:
   pull-requests: write
   contents: write
+
 jobs:
   auto_merge:
     runs-on: ubuntu-latest
@@ -12,6 +15,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Debug Permissions
+        run: |
+          echo "Testing token permissions for API access"
+          curl -H "Authorization: token ${{ secrets.MY_PERSONAL_TOKEN_COURIER_PORTAL }}" \
+               -H "Accept: application/vnd.github.v3+json" \
+               https://api.github.com/
+
       - name: Merge Pull Request
         uses: actions/github-script@v6
         with:
@@ -20,6 +31,7 @@ jobs:
             if (context.payload.pull_request.base.ref === 'master') {
               const { owner, repo } = context.repo;
               const pull_number = context.payload.pull_request.number;
+
               try {
                 await github.rest.pulls.merge({
                   owner,
@@ -27,14 +39,23 @@ jobs:
                   pull_number,
                   merge_method: 'merge'
                 });
-                console.log(`Pomyślnie połączono PR #${pull_number}`);
+                console.log(`Successfully merged PR #${pull_number}`);
               } catch (error) {
-                console.error('Błąd podczas łączenia PR:', error);
+                console.error('Error merging PR:', error);
                 core.setFailed(error.message);
               }
             } else {
-              console.log('Nie łączę PR, ponieważ nie jest skierowany do mastera.');
+              console.log('Not merging PR because it is not targeting master.');
             }
+
+      - name: Debug API Response
+        if: always()
+        run: |
+          echo "Testing API access to specific PR:"
+          curl -H "Authorization: token ${{ secrets.MY_PERSONAL_TOKEN_COURIER_PORTAL }}" \
+               -H "Accept: application/vnd.github.v3+json" \
+               https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}
+
   deploy:
     needs: auto_merge
     runs-on: ubuntu-latest
@@ -44,14 +65,34 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Konfiguracja Git
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      
+      - name: Add SSH Host to Known Hosts
         run: |
-          git config --global url."https://${{ secrets.MY_PERSONAL_TOKEN_COURIER_PORTAL }}@github.com/".insteadOf "git@github.com:"
-          
-      - name: Deploy
+          mkdir -p ~/.ssh
+          ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Test SSH Connection
         run: |
-          ssh -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} '
-            cd ./domains/kurierportal.cfolks.pl/public_html/courier_portal/laravel/ && \
-            git checkout master && \
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }} 'echo "SSH connection successful"'
+      
+      - name: Deploy to Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd ./domains/kurierportal.cfolks.pl/public_html/courier_portal/laravel/
+            git checkout master
             git pull origin master
-          '
+
+      - name: Debug SSH Key Error
+        if: failure()
+        run: |
+          echo "SSH Key might be causing issues, running debug information"
+          ssh -v ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }}
