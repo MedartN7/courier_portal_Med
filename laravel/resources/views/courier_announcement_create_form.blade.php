@@ -45,7 +45,7 @@
                                 <div class="row mb-3">
                                     <label for="courier_announcement_name" class="col-md-4 col-form-label text-md-end">{{ __('base.courier_announcement_name' ) }}</label>
                                     <div class="col-md-6">
-                                        <input id="courier_announcement_name" type="text" data-message="{{ $formData[ 'courier_announcement_name' ][ 'message' ] }}" @if ( $formData[ 'courier_announcement_name' ][ 'regex' ] !== '' ) pattern="{{  $formData[ 'courier_announcement_name' ][ 'regex' ] }}" @endif class="form_input form-control @error( 'courier_announcement_name' ) is-invalid @enderror" name="courier_announcement_name" value="{{ old( 'courier_announcement_name' ) }}" autocomplete="courier_announcement_name">
+                                        <input id="courier_announcement_name" type="text" data-message="{{ __( 'base.' . $formData[ 'courier_announcement_name' ][ 'message' ] ) }}" @if ( $formData[ 'courier_announcement_name' ][ 'regex' ] !== '' ) pattern="{{  $formData[ 'courier_announcement_name' ][ 'regex' ] }}" @endif class="form_input form-control @error( 'courier_announcement_name' ) is-invalid @enderror" name="courier_announcement_name" value="{{ old( 'courier_announcement_name' ) }}" autocomplete="courier_announcement_name">
                                     </div>
                                 </div>
                                 <div class="cargo_type_container table-responsive">
@@ -432,7 +432,7 @@
                                                                     <label class="col-form-label text-md-end" for="{{ $cellName }}"><strong>{{ __( 'base.' . $key ) }}</strong></label>
                                                                 </div>
                                                                 <div class="one_line_contact_right">
-                                                                    <input class="form_input form-group form-control @error( $cellName ) is-invalid @enderror" type="text" id="{{ $cellName }}" data-message="{{ $formData[ $key ][ 'message' ] }}" @if ( $formData[ $key ][ 'regex' ] !== '' ) pattern="{{  $formData[ $key ][ 'regex' ] }}" @endif name="{{ $cellName }}" value="{{ old( $cellName ) }}" maxlength="200">
+                                                                    <input class="form_input form-group form-control @error( $cellName ) is-invalid @enderror" type="text" id="{{ $cellName }}" data-message="{{ __( 'bese.' . $formData[ $key ][ 'message' ] ) }}" @if ( $formData[ $key ][ 'regex' ] !== '' ) pattern="{{  $formData[ $key ][ 'regex' ] }}" @endif name="{{ $cellName }}" value="{{ old( $cellName ) }}" maxlength="200">
                                                                 </div>
                                                             </div>
                                                         @endforeach

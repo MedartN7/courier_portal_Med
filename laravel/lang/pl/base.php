@@ -692,6 +692,7 @@ return [
     "country_message_regex" => "Dopuszczalna ilość znaków 60 i nie może zawierać cyfr ani znaków specjalnych.",
     "post_code_message_regex" => "Kod pocztowy musi być w poprawnym formacie.",
     "subject_message_regex" => "Dopuszczalna ilość znaków 50.",
+    "message_message_regex" => "Dopuszczalna ilość znaków 500.",
     "courier_announcement_name_message_regex" => "Dopuszczalna ilość znaków 100.",
     "nav_menu_business_card" => "Wizytówki",
     "accept_marketing" => "AKceptuje marketing",

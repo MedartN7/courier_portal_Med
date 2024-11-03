@@ -8,6 +8,7 @@ let isCookiesVisible = false;
 async function fetchTranslations() {
     try {
         const response = await fetch('cookies/translate');
+        // console.log( response ); 
         if (!response.ok) {
             throw new Error('Błąd podczas pobierania tłumaczeń');
         }
@@ -42,7 +43,7 @@ function makeMainBackground() { // Tworzymy element tła (overlay)
 function makeCookiesBackground() { // Tworzymy prostokąt na środku ekranu
     const rectangle = document.createElement('div');
     const width = window.innerWidth - 1000 < 0 ? window.innerWidth / 1.1 : window.innerWidth / ( ( window.innerWidth - 1000 ) / 1000 + 1.1 );
-    console.log( width );
+
     rectangle.id = 'fullCookiesContainer';
     rectangle.style.width = width + 'px';
     rectangle.style.height = 'auto';
@@ -295,7 +296,7 @@ function setCookie(name, value, days) {
 
 
 document.addEventListener('DOMContentLoaded', async () => {
-    console.log( document.cookie );
+    
     translations = await fetchTranslations();
     if( translations ) {
         const cookie = getCookie( 'necessary' );

@@ -4,8 +4,7 @@
 function regularExpressionsControl( element ) { 
     let regex = new RegExp( element.pattern );
     let message = element.message;
-    
-    console.log( checkFieldValueIfMatchWithRegex( element.id, regex ), regex, element.id )
+
     if( checkFieldValueIfMatchWithRegex( element.value, regex ) ) {
         changeFieldIfIsOk( element );
     } else {
@@ -15,13 +14,9 @@ function regularExpressionsControl( element ) {
 }
 
 function checkFieldValueIfMatchWithRegex( value, regex ) {
-    for ( let i = 0; i < value.length; i++ ) {
-        if( !regex.test( value[ i ] ) ) {
-            return false;
-        }
-    }
-
-    return true;
+    const isMatch = regex.test( value )
+    console.log( value, regex, isMatch )
+    return isMatch;
 }
 
 function changeFieldIfIsWrong( field, message ) {
@@ -52,7 +47,7 @@ function changeFieldIfIsOk( field ) {
 
 document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll( '.form_input').forEach( function( element ) {
-        element.addEventListener( 'input', function(event) {
+        element.addEventListener( 'input', function( event ) {
             regularExpressionsControl( element );
         });
     });

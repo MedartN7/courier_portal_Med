@@ -211,7 +211,7 @@ class DeclarationFormController extends Controller
     }
 
     private function getSingleTextInput( $name, $title, $required = '', $placeholder = '', $autofocus = '' ) {
-        return '</br><input type="text" class="form_input form-control" data-message="' . $this->getMessageInput( $name ) . '" pattern="' . $this->getRegexInput( $name ) . '" id="input_'.$name.'_id" name="'.$name.'"
+        return '</br><input type="text" class="form_input form-control" data-message="' . __( 'base.' . $this->getMessageInput( $name ) ) . '" pattern="' . $this->getRegexInput( $name ) . '" id="input_'.$name.'_id" name="'.$name.'"
                 placeholder="'.$placeholder.'"
                 '.$required.'
                 '.$autofocus.'
@@ -226,7 +226,7 @@ class DeclarationFormController extends Controller
         $form = null;
         // dd( $this->getRegexInput( $name ) );
         $form .= '<div class="'.$name.'_div"><label for="'.$name.'_label_id">';
-        $form .= '<input class="form_input form-control" title="" type="text" data-message="' . $this->getMessageInput( $name ) . '" pattern="' . $this->getRegexInput( $name ) . '" id="'.$name.'_id" name="'.$name.'" "'.$required.'">';
+        $form .= '<input class="form_input form-control" title="" type="text" data-message="' . __( 'base.' . $this->getMessageInput( $name ) ) . '" pattern="' . $this->getRegexInput( $name ) . '" id="'.$name.'_id" name="'.$name.'" "'.$required.'">';
         $form .= '<span class="number_postfix">'.$postfix.'</span>';
         $form .= '</label></div>';
         return $form;
