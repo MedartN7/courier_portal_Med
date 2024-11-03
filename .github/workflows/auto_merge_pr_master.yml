@@ -43,35 +43,52 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Instalacja klucza SSH
+        
+      - name: Konfiguracja SSH
         run: |
+          # Utworzenie katalogów i plików SSH
           mkdir -p ~/.ssh
+          touch ~/.ssh/known_hosts
+          
+          # Zapisanie klucza prywatnego
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          eval $(ssh-agent -s)
-          # Utworzenie pliku expect do automatycznej obsługi hasła
+          
+          # Instalacja expect
+          sudo apt-get update
+          sudo apt-get install -y expect
+          
+          # Utworzenie skryptu expect
           cat > ~/.ssh/ssh-add-pass.sh << 'EOF'
           #!/usr/bin/expect -f
+          set timeout 60
+          
+          spawn ssh-agent -s
+          expect eof
+          
           spawn ssh-add ~/.ssh/deploy_key
-          expect "Enter passphrase"
+          expect "Enter passphrase for /home/runner/.ssh/deploy_key:"
           send "${{ secrets.SSH_PASSPHRASE }}\r"
           expect eof
           EOF
+          
           chmod +x ~/.ssh/ssh-add-pass.sh
-          # Instalacja expect
-          sudo apt-get update && sudo apt-get install -y expect
-          # Uruchomienie skryptu expect
+          
+          # Uruchomienie agenta SSH i dodanie klucza
+          eval $(ssh-agent -s)
           ~/.ssh/ssh-add-pass.sh
-      - name: Dodanie known hosts
-        run: |
+          
+          # Dodanie known hosts
           ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+          
       - name: Wdrożenie na serwer
         run: |
-          ssh -i ~/.ssh/deploy_key -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} '
+          ssh -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} '
             cd ./domains/kurierportal.cfolks.pl/public_html/courier_portal/laravel/ && \
             git checkout master && \
             git pull origin master
           '
+          
       - name: Czyszczenie
         if: always()
         run: |
