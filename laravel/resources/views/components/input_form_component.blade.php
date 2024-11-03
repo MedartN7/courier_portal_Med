@@ -61,20 +61,20 @@
                                 <span class="tooltiptext">{{ __( 'base.postfix_explain_notes' ) }}</span>
                             </div>
                         </div>
-                        <input id="postfix_select_{{ $name }}" type="text" data-message="{{ $message }}" @if ( $pattern !== '' ) pattern="{{ $pattern }}" @endif  class="form-control @error( "postfix_select_" . $name ) is-invalid @enderror" name="postfix_select_{{ $name }}" value="{{ old( "postfix_select_" . $name ) }}" autocomplete="postfix_select_{{ $name }}" maxlength="6">
+                        <input id="postfix_select_{{ $name }}" type="text" data-message="{{ __( 'base.' . $message ) }}" @if ( $pattern !== '' ) pattern="{{ $pattern }}" @endif  class="form-control @error( "postfix_select_" . $name ) is-invalid @enderror" name="postfix_select_{{ $name }}" value="{{ old( "postfix_select_" . $name ) }}" autocomplete="postfix_select_{{ $name }}" maxlength="6">
                     </div>
                     <div class="col-md-4 direction_city_container_{{ $name }}">
                         <div class="text-center"><b><label for="direction_city_{{ $name }}" class="col-form-label">{{ __('base.user_announcement_direction_city') }}</label></b></div>
-                        <input id="direction_city_{{ $name }}" type="text" data-message="{{ $message }}" @if ( $pattern !== '' ) pattern="{{ $pattern }}" @endif class="form-control @error( "direction_city_" . $name ) is-invalid @enderror" name="direction_city_{{ $name }}" value="{{ old( "direction_city_" . $name ) }}" autocomplete="direction_city_{{ $name }}" maxlength="80">
+                        <input id="direction_city_{{ $name }}" type="text" data-message="{{ __( 'base.' . $message ) }}" @if ( $pattern !== '' ) pattern="{{ $pattern }}" @endif class="form-control @error( "direction_city_" . $name ) is-invalid @enderror" name="direction_city_{{ $name }}" value="{{ old( "direction_city_" . $name ) }}" autocomplete="direction_city_{{ $name }}" maxlength="80">
                     </div>
                 </div>
             @else
                 {{-- {{ dd($name, $pattern) }} --}}
-                <input id="{{ $name }}" type="{{ $type }}" data-message="{{ $message }}" @if ( $pattern !== '' ) pattern="{{ $pattern }}" @endif class="form_input form-control @error( $name ) is-invalid @enderror" name="{{ $name }}" value="{{ old( $name, $default_data ) }}" {{ $required }} autocomplete="{{ $name }}" maxlength="{{ $maxLength }}" >
+                <input id="{{ $name }}" type="{{ $type }}" data-message="{{ __( 'base.' . $message ) }}" @if ( $pattern !== '' ) pattern="{{ $pattern }}" @endif class="form_input form-control @error( $name ) is-invalid @enderror" name="{{ $name }}" value="{{ old( $name, $default_data ) }}" {{ $required }} autocomplete="{{ $name }}" maxlength="{{ $maxLength }}" >
             @endif
             @error( $name )
                 <span class="invalid-feedback" role="alert">
-                    <strong> {{ $message }}</strong>
+                    <strong> {{ __( 'base.' . $message ) }}</strong>
                 </span>
             @enderror
         </div>

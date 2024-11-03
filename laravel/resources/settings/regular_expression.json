@@ -12,19 +12,19 @@
         "message" : "email_message_regex"
     },
     "phone" : {
-        "regex" : "^\\+?\\d{1,3}[-\\. ]?(\\d{2,3})[-\\. ]?\\d{3}[-\\. ]?\\d{2,3}[-\\. ]?\\d{2,4}$",
+        "regex" : "",
         "message" : "phone_message_regex"
     },
     "phone_number" : {
-        "regex" : "^\\+?\\d{1,3}[-\\. ]?(\\d{2,3})[-\\. ]?\\d{3}[-\\. ]?\\d{2,3}[-\\. ]?\\d{2,4}$",
+        "regex" : "",
         "message" : "phone_number_message_regex"
     },
     "telephone_number" : {
-        "regex" : "^\\+?\\d{1,3}[-\\. ]?(\\d{2,3})[-\\. ]?\\d{3}[-\\. ]?\\d{2,3}[-\\. ]?\\d{2,4}$",
+        "regex" : "",
         "message" : "phone_number_message_regex"
     },
     "additional_telephone_number" : {
-        "regex" : "^\\+?\\d{1,3}[-\\. ]?(\\d{2,3})[-\\. ]?\\d{3}[-\\. ]?\\d{2,3}[-\\. ]?\\d{2,4}$",
+        "regex" : "",
         "message" : "phone_number_message_regex"
     },
     "address" : {
@@ -96,11 +96,11 @@
         "message" : "post_code_message_regex"
     },
     "subject" : {
-        "regex" : "/^.{2,50}$/",
+        "regex" : "^.{2,50}$",
         "message" : "subject_message_regex"
     },
     "message" : {
-        "regex" : "/^.{1,500}$/",
+        "regex" : "/^.{3,500}$/",
         "message" : "message_message_regex"
     },
     "courier_announcement_name" : {
