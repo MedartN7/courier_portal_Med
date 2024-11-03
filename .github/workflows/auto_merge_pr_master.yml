@@ -1,13 +1,10 @@
 name: Auto Merge Pull Request and Deploy
-
 on:
   pull_request:
     types: [opened, edited]
-
 permissions:
   pull-requests: write
   contents: write
-
 jobs:
   auto_merge:
     runs-on: ubuntu-latest
@@ -15,7 +12,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
       - name: Merge Pull Request
         uses: actions/github-script@v6
         with:
@@ -24,7 +20,6 @@ jobs:
             if (context.payload.pull_request.base.ref === 'master') {
               const { owner, repo } = context.repo;
               const pull_number = context.payload.pull_request.number;
-
               try {
                 await github.rest.pulls.merge({
                   owner,
@@ -40,7 +35,6 @@ jobs:
             } else {
               console.log('Nie łączę PR, ponieważ nie jest skierowany do mastera.');
             }
-
   deploy:
     needs: auto_merge
     runs-on: ubuntu-latest
@@ -49,19 +43,28 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
       - name: Instalacja klucza SSH
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           eval $(ssh-agent -s)
-          ssh-add <(echo "${{ secrets.SSH_PASSPHRASE }}") ~/.ssh/deploy_key
-
+          # Utworzenie pliku expect do automatycznej obsługi hasła
+          cat > ~/.ssh/ssh-add-pass.sh << 'EOF'
+          #!/usr/bin/expect -f
+          spawn ssh-add ~/.ssh/deploy_key
+          expect "Enter passphrase"
+          send "${{ secrets.SSH_PASSPHRASE }}\r"
+          expect eof
+          EOF
+          chmod +x ~/.ssh/ssh-add-pass.sh
+          # Instalacja expect
+          sudo apt-get update && sudo apt-get install -y expect
+          # Uruchomienie skryptu expect
+          ~/.ssh/ssh-add-pass.sh
       - name: Dodanie known hosts
         run: |
           ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
-
       - name: Wdrożenie na serwer
         run: |
           ssh -i ~/.ssh/deploy_key -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} '
@@ -69,9 +72,9 @@ jobs:
             git checkout master && \
             git pull origin master
           '
-
       - name: Czyszczenie
         if: always()
         run: |
           rm -f ~/.ssh/deploy_key
+          rm -f ~/.ssh/ssh-add-pass.sh
           eval $(ssh-agent -k)
