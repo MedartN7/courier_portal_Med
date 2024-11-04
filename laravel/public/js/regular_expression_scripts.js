@@ -15,7 +15,6 @@ function regularExpressionsControl( element ) {
 
 function checkFieldValueIfMatchWithRegex( value, regex ) {
     const isMatch = regex.test( value )
-    console.log( value, regex, isMatch )
     return isMatch;
 }
 

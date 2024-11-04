@@ -116,7 +116,6 @@ function deleteEmptyDateFormFields(form) {
             descriptionInput.value === null || descriptionInput.value === "";
         isElementToDelete =
             directionIsEmpty && dateIsEmpty && descriptionIsEmpty;
-        // console.log( dateInput, descriptionInput, directionIsEmpty, dateIsEmpty, descriptionIsEmpty );
         if (isElementToDelete) {
             directionsInputFrom.parentNode.removeChild( directionsInputFrom );
             directionsInputTo.parentNode.removeChild( directionsInputTo );

@@ -8,7 +8,6 @@ let isCookiesVisible = false;
 async function fetchTranslations() {
     try {
         const response = await fetch('cookies/translate');
-        // console.log( response ); 
         if (!response.ok) {
             throw new Error('Błąd podczas pobierania tłumaczeń');
         }
