@@ -7,7 +7,7 @@ let isCookiesVisible = false;
 
 async function fetchTranslations() {
     try {
-        const response = await fetch('cookies/translate');
+        const response = await fetch('/cookies/translate');
         if (!response.ok) {
             throw new Error('Błąd podczas pobierania tłumaczeń');
         }
@@ -295,7 +295,6 @@ function setCookie(name, value, days) {
 
 
 document.addEventListener('DOMContentLoaded', async () => {
-    
     translations = await fetchTranslations();
     if( translations ) {
         const cookie = getCookie( 'necessary' );
