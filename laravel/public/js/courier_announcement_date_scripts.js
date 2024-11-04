@@ -168,7 +168,6 @@ function validateConditionsDate(formDate) {
     const oneDayMillisecond = 1000 * 60 * 60 * 24;
 
     var diffDays = parseInt((userDate - currentDate) / oneDayMillisecond);
-    console.log( diffDays );
     if (diffDays < 0) {
         return false;
     } else {
@@ -178,7 +177,6 @@ function validateConditionsDate(formDate) {
 
 function setAddNewDateButtonVisible( inputDirectionFrom, inputDirectionTo, inputDate ) {
     var addButton = document.querySelector(".add_date_component_btn");
-    console.log( inputDirectionFrom, inputDirectionTo, inputDate );
     if ( inputDirectionFrom == true && inputDirectionTo == true && inputDate == true) {
         addButton.style.opacity = 1.0;
         addButton.style.pointerEvents = "auto";
@@ -310,7 +308,6 @@ function clearUnvisibleCheckbox( direction ) {
 
     allPostCodeCheckboxes.forEach( function( checkbox ) {
         checkbox.checked = false;
-        console.log( checkbox );
         var name = checkbox.id;
         var matchPostfix = name.match(/post_code_checkbox_(.+)/);
         const button = document.querySelector(

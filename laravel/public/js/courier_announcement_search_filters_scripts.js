@@ -32,7 +32,6 @@ function subscribeVisibleButtonsFilters() {
     const hideFilterButton = document.querySelector( '#courier_announcement_hide_filters_button' );
     const allFiltersField = document.querySelector( '.filters_container_body' );
 
-    // console.log( showFilterButton, hideFilterButton, allFiltersField );
     hideFilterButton.style.display = 'none';
     allFiltersField.style.display = 'none';
 
@@ -56,11 +55,9 @@ function getMatchedNamePostfix( element, textMatching ) {
 
 function subscribeClickDirectionsButtons( dir ) {
     let directionsButtons = document.querySelectorAll( '[class^="direction_button_' + dir + '"]' );
-    console.log( directionsButtons );
     directionsButtons.forEach( function ( button ) {
         button.addEventListener( 'click', function() {
             const postfix = getMatchedNamePostfix( button, 'id_direction_button_' + dir + '_' );
-            console.log( postfix );
             button.style.opacity = button.style.opacity == '1' ? '0.5' : '1.0';
             const hideDirection = document.getElementById( 'id_post_codes_' + dir + '_filter_body_direction' );
             if( button.style.opacity == '1' ) {
@@ -72,7 +69,6 @@ function subscribeClickDirectionsButtons( dir ) {
                         othersButton.style.opacity = '0.5';
                     }
                 } );
-                console.log( dir );
             } else {
                 directionsButtons.forEach( function ( othersButton ) {
                     othersButton.style.opacity = '0.5';
@@ -86,10 +82,8 @@ function subscribeClickDirectionsButtons( dir ) {
 
 
 function setVisibleSingleDirectionPostCodes( postfix, dir ) {
-    let postCodesContainers = document.querySelectorAll( '[class^="post_codes_' + dir + '_container_"]' );
-    console.log( postCodesContainers );
+    let postCodesContainers = document.querySelectorAll( '[class^="post_codes_' + dir + '_container_"]' );;
     postCodesContainers.forEach( function( container ) {
-        console.log( container.classList, postfix );
         if ( container.classList.contains('post_codes_' + dir + '_container_' + postfix ) && postfix != null ) {
 
             container.style.display = 'inline-block';
