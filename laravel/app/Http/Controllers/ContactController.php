@@ -9,18 +9,19 @@ class ContactController extends Controller
 {
     public function sendMail( Request $request )
     {
+        //dd( $request );
         $validated = $request->validate([
             'subject' => 'required|string|max:255',
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'nullable|string|max:255',
+            'name' => 'required|string|max:255',
+            'surname' => 'nullable|string|max:255',
             'email' => 'required|email|max:255',
             'phone' => 'nullable|string|max:20',
             'message' => 'required|string',
         ]);
         $data = [
-            'subject' => $validated['subject'],
-            'first_name' => $validated['first_name'],
-            'last_name' => $validated['last_name'] ?? '', 
+            'subject' => $validated['name'],
+            'first_name' => $validated['name'],
+            'last_name' => $validated['surname'] ?? '', 
             'email' => $validated['email'],
             'phone' => $validated['phone'] ?? '',
             'message_content' => $validated['message'],
