@@ -24,10 +24,10 @@
                     <div class="col-md-2">
                         <div class="text-center"><b><label for="country_select_{{ $name }}" class="col-form-label">{{ __('base.default_direction_country') }}</label></b></div>
                         <select id="country_select_{{ $name }}" class="form-control country_select_{{ $name }} @error('country_select_' . $name ) is-invalid @enderror" name="country_select_{{ $name }}" {{ $required }} autocomplete="country_select_{{ $name }}">
-                            <option value="" disabled {{ old( "country_select_" . $name ) ? '' : 'selected' }}>{{ __('base.default_direction_country') }}</option>
-                            @foreach ( $options as $direction )
-                                <option value="{{ $direction['name'] }}" {{ old( "country_select_" . $name ) == $direction['name'] ? 'selected' : '' }}>
-                                    <span>{!! html_entity_decode( $direction['unicode'] ) !!}</span>
+                            <option value="" disabled {{ old("country_select_" . $name) ? '' : 'selected' }}>{{ __('base.default_direction_country') }}</option>
+                            @foreach ($options as $direction)
+                                <option value="{{ $direction['name'] }}" {{ old("country_select_" . $name) == $direction['name'] ? 'selected' : '' }}>
+                                    {{ $direction['print_name'] }}
                                 </option>
                             @endforeach
                         </select>
