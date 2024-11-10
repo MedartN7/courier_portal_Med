@@ -13,28 +13,32 @@ class CustomUserController extends Controller
         return $this->validator( $request->all() );
     }
 
-    private function validator( $data) {
+    private function validator( $data ) {
         $userRules = [
-            'name' => ['required', 'string', 'max:55', 'regex:/^[a-zA-ZąĄćĆęĘłŁńŃóÓśŚżŻźŹ\s]+$/u'],
-            'surname' => ['required', 'string', 'max:55', 'regex:/^[a-zA-ZąĄćĆęĘłŁńŃóÓśŚżŻźŹ\s]+$/u'],
-            'phone_number' => ['required', 'numeric', 'digits_between:9,14'],
+            'name' => ['required', 'string', 'max:55' ],
+            'surname' => ['required', 'string', 'max:90' ],
+            'phone_number' => ['required', 'string', 'min:9', 'max:20'],
             'email' => ['required', 'email'],
-            'd_o_b' => ['required', 'date', 'before:2010-01-01'],
+            'd_o_b' => ['required', 'date', 'before_or_equal:' . now()->subYears(18)->format('Y-m-d') ],
         ];
         $companyRules = [];
 
+        $customMessages = [
+            'd_o_b.before_or_equal' => __( 'base.custom_min_age' ),
+        ];
+
         if ( array_key_exists( 'company_fields_checkbox', $data ) ) {
             $companyRules = [
-                'company_name' => ['nullable', 'string', 'max:99', 'regex:/^[a-zA-Z\s]+$/' ],
-                'company_address' => ['nullable', 'string', 'max:55'],
-                'company_phone_number' => ['nullable', 'string', 'digits_between:9,14'],
+                'company_name' => ['nullable', 'string', 'max:99' ],
+                'company_address' => ['nullable', 'string', 'max:99'],
+                'company_phone_number' => ['nullable', 'string', 'max:20'],
                 'company_post_code' => ['nullable', 'string', 'max:9'],
-                'company_city' => ['nullable', 'string', 'max:44', 'regex:/^[a-zA-Z\s]+$/' ],
-                'company_country' => ['nullable', 'string', 'max:44', 'regex:/^[a-zA-Z\s]+$/' ],
+                'company_city' => ['nullable', 'string', 'max:99' ],
+                'company_country' => ['nullable', 'string', 'max:99' ],
             ];
         }
 
-        $validateResult = Validator::make($data, array_merge( $userRules, $companyRules ) );
+        $validateResult = Validator::make($data, array_merge( $userRules, $companyRules ), $customMessages );
         return $this->setAttributesFormNames( $validateResult );
     }
 

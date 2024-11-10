@@ -13,6 +13,7 @@ use App\Http\Controllers\CustomUserController;
 use App\Http\Controllers\JsonParserController;
 use App\Http\Controllers\CookiesController;
 use App\Http\Controllers\BusinessCardController;
+use App\Http\Controllers\GoogleAuthController;
 
 //debug_print_backtrace(); exit();
 
@@ -31,6 +32,7 @@ use App\Http\Controllers\BusinessCardController;
 
     Route::get('/', function () { return view('welcome'); } )->name('main');
     Route::get('/rodo/rules', function () { return view('rodo'); })->name('rodo');
+    Route::get('/policy/rules', function () { return view('rodo'); })->name('policy');
     Route::get('/donate', function () { return view('donations'); })->name('donate');
     Route::get('/business/card', [ BusinessCardController::class, 'show' ] )->name('businessCard');
 
@@ -177,4 +179,11 @@ use App\Http\Controllers\BusinessCardController;
 { //############################### END POINTS #########################
     // Route::get('/settings/regex', [ JsonParserController::class, 'getRegularExpression']);
     Route::get( '/cookies/translate', [ CookiesController::class, 'getTranslations'] );
+} //####################################################################
+
+
+
+{ //############################### SOCIAL MEDIA #######################
+    Route::get('/google/auth', [ GoogleAuthController::class, 'redirectToGoogle'] )->name( 'googleLogin' );
+    Route::get( '/google/auth/callback', [ GoogleAuthController::class, 'handleGoogleCallback'] )->name( 'googleCallback' );
 } //####################################################################

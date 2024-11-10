@@ -16,7 +16,7 @@
                         <div class="card-body">
                             <form action="{{ route('cargo_generator') }}" method="POST" id="user_announcement_form">
                                 @csrf
-
+                                {{-- {{ dd( get_defined_vars() ) }}  --}}
                                 @foreach ($errors->all() as $error)
                                     <p class="alert alert-danger" role="alert">{{ $error }}</p>
                                 @endforeach
