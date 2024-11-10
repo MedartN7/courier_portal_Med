@@ -8,6 +8,11 @@
                 <div class="card-header">{{ __('base.login_title') }}</div>
 
                 <div class="card-body">
+                    @if ( session( 'error' ) )
+                        <div class="alert alert-danger">
+                            {{ session( 'error' ) }}
+                        </div>
+                    @endif
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 
@@ -65,6 +70,9 @@
                             </div>
                         </div>
                     </form>
+                    {{-- <a href="{{ route( 'googleLogin' ) }}" class="btn btn-google">
+                        Zaloguj się przez Google
+                    </a> --}}
                 </div>
             </div>
         </div>

@@ -1,110 +1,110 @@
 {
     "name" : {
         "regex" : "^[a-zA-ZąĄćĆęĘłŁńŃóÓśŚżŻźŹ][a-zA-ZąĄćĆęĘłŁńŃóÓśŚżŻźŹ\\s\\-]{1,25}$",
-        "message" : "Dopuszczalna ilość znaków 25. Nie może zaczynać się od spacji ani znaku specjalnego."
+        "message" : "name_message_regex"
     },
     "surname" : {
         "regex" : "^[a-zA-ZąĄćĆęĘłŁńŃóÓśŚżŻźŹ][a-zA-ZąĄćĆęĘłŁńŃóÓśŚżŻźŹ\\s\\-]{1,49}$",
-        "message" : "Dopuszczalna ilość znaków 25. Nie może zaczynać się od spacji ani znaku specjalnego."
+        "message" : "surname_message_regex"
     },
     "email" : {
-        "regex" : "^[a-zA-Z0-9._%+\\-]+@[a-zA-Z0-9.\\-]+\\.(com|org|net|edu|gov|mil|biz|info|pl|eu|co|uk|de|fr|cz|sk|it)$",
-        "message" : "Podaj poprawny adres e-mail. Adres powinien zawierać znaki alfanumeryczne oraz jeden znak '@'."
+        "regex" : "^[a-zA-Z0-9._%+\\-]+@[a-zA-Z0-9.\\-]+\\.(com|org|net|edu|gov|mil|biz|info|pl|eu|co|uk|de|fr|cz|sk|it|int|jobs|mobi|name)$",
+        "message" : "email_message_regex"
     },
     "phone" : {
         "regex" : "^\\+?\\d{1,3}([\\.\\- ]?\\d{2,3})?[\\.\\- ]?\\d{3}[\\.\\- ]?\\d{2,3}[\\.\\- ]?\\d{2,4}$",
-        "message" : "Numer telefonu musi być w formacie międzynarodowym i składać się z co najmniej 8 cyfr."
+        "message" : "phone_message_regex"
     },
     "phone_number" : {
         "regex" : "^\\+?\\d{1,3}([\\.\\- ]?\\d{2,3})?[\\.\\- ]?\\d{3}[\\.\\- ]?\\d{2,3}[\\.\\- ]?\\d{2,4}$",
-        "message" : "Numer telefonu musi być w formacie międzynarodowym i składać się z co najmniej 8 cyfr."
+        "message" : "phone_message_regex"
     },
     "telephone_number" : {
         "regex" : "^\\+?\\d{1,3}([\\.\\- ]?\\d{2,3})?[\\.\\- ]?\\d{3}[\\.\\- ]?\\d{2,3}[\\.\\- ]?\\d{2,4}$",
-        "message" : "Numer telefonu musi być w formacie międzynarodowym i składać się z co najmniej 8 cyfr."
+        "message" : "phone_message_regex"
     },
     "additional_telephone_number" : {
         "regex" : "^\\+?\\d{1,3}([\\.\\- ]?\\d{2,3})?[\\.\\- ]?\\d{3}[\\.\\- ]?\\d{2,3}[\\.\\- ]?\\d{2,4}$",
-        "message" : "Numer telefonu musi być w formacie międzynarodowym i składać się z co najmniej 8 cyfr."
+        "message" : "phone_message_regex"
     },
     "address" : {
         "regex" : "^[a-zA-ZąĄćĆęĘłŁńŃóÓśŚżŻźŹ0-9.,\\-/\\s]+,\\s*\\d{2,6}\\s?[a-zA-Z]{0,2},\\s?[a-zA-Z\\s]+,\\s?[A-Z]{2,3}$",
-        "message" : "Adres musi być w poprawnym formacie, zawierającym ulicę, numer domu i kod pocztowy."
+        "message" : "address_message_regex"
     },
     "company_name" : {
         "regex" : "^[a-zA-Z0-9ąĄćĆęĘłŁńŃóÓśŚżŻźŹ&.,\\-()'\\\"\\s]{2,100}$",
-        "message" : "Nazwa firmy musi zawierać od 2 do 100 znaków, w tym litery, cyfry i znaki specjalne."
+        "message" : "company_name_message_regex"
     },
     "company_address" : {
         "regex" : "^[a-zA-ZąĄćĆęĘłŁńŃóÓśŚżŻźŹ0-9.,\\-/\\s]+,\\s*\\d{2,6}\\s?[a-zA-Z]{0,2},\\s?[a-zA-Z\\s]+,\\s?[A-Z]{2,3}$",
-        "message" : "Adres firmy musi być w poprawnym formacie, zawierającym ulicę, numer domu i kod pocztowy."
+        "message" : "company_address_message_regex"
     },
     "company_phone_number" : {
         "regex" : "^\\+?\\d{1,3}([\\.\\- ]?\\d{2,3})?[\\.\\- ]?\\d{3}[\\.\\- ]?\\d{2,3}[\\.\\- ]?\\d{2,4}$",
-        "message" : "Numer telefonu firmy musi być w formacie międzynarodowym i składać się z co najmniej 8 cyfr."
+        "message" : "phone_message_regex"
     },
     "company_post_code" : {
         "regex" : "^\\d{2}-\\d{3}$|^\\d{5}$|^\\d{4}$|^\\d{4}\\s?[A-Za-z]{2}$|^[A-Za-z]{1,2}\\d{1,2}\\s?\\d[A-Za-z]{2}$",
-        "message" : "Kod pocztowy firmy musi być w poprawnym formacie."
+        "message" : "company_post_code_message_regex"
     },
     "company_city" : {
         "regex" : "^[a-zA-ZÀ-ÖØ-öø-ÿąĄćĆęĘłŁńŃóÓśŚżŻźŹ\\s\\-]{2,100}$",
-        "message" : "Miasto musi zawierać od 2 do 100 znaków i nie może zawierać cyfr ani znaków specjalnych."
+        "message" : "company_city_message_regex"
     },
     "company_country" : {
         "regex" : "/^[a-zA-ZÀ-ž\\s\\-]{2,60}$/",
-        "message" : "Kraj musi zawierać od 2 do 60 znaków i nie może zawierać cyfr ani znaków specjalnych."
+        "message" : "company_country_message_regex"
     },
     "quantity_input_" : {
         "regex" : "/^(?:[1-9][0-9]{0,2}|10)$/",
-        "message" : "Ilość paczek musi być liczbą całkowitą od 1 do 10."
+        "message" : "quantity_input__message_regex"
     },
     "weight_input_" : {
         "regex" : "/^(\\d+(?:[.,]\\d+)?\\s*(kg))$/",
-        "message" : "Waga musi być liczbą, a jednostka powinna być w formacie kg, g, lb lub oz."
+        "message" : "weight_input__message_regex"
     },
     "value_input_" : {
         "regex" : "/^\\s*(\\d+(?:\\.\\d{1,2})?)\\s*(£)?\\s*$",
-        "message" : "Wartość paczki musi być liczbą z maksymalnie dwoma miejscami po przecinku podaną w £."
+        "message" : "value_input__message_regex"
     },
     "description_" : {
         "regex" : "/^.{1,500}$/",
-        "message" : "Opis przedmiotu musi mieć od 1 do 500 znaków."
+        "message" : "description_message_regex"
     },
     "name_surname" : {
         "regex" : "^[a-zA-ZąĄćĆęĘłŁńŃóÓśŚżŻźŹ][a-zA-ZąĄćĆęĘłŁńŃóÓśŚżŻźŹ\\s\\-]{1,75}$",
-        "message" : "Dopuszczalna ilość znaków 75. Nie może zaczynać się od spacji ani znaku specjalnego."
+        "message" : "name_surname_message_regex"
     },
     "business_name" : {
         "regex" : "^[a-zA-Z0-9ąĄćĆęĘłŁńŃóÓśŚżŻźŹ&.,\\-()'\\\"\\s]{2,100}$",
-        "message" : "Dopuszczalna ilość znaków 100, w tym litery, cyfry i znaki specjalne."
+        "message" : "business_name_message_regex"
     },
     "street" : {
         "regex" : "^[a-zA-ZąĄćĆęĘłŁńŃóÓśŚżŻźŹ0-9.,\\-/\\s]+,\\s*\\d{2,6}\\s?[a-zA-Z]{0,2},\\s?[a-zA-Z\\s]+,\\s?[A-Z]{2,3}$",
-        "message" : "Ulica musi być w poprawnym formacie, zawierającym nazwę ulicy i numer domu."
+        "message" : "street_message_regex"
     },
     "city" : {
         "regex" : "^[a-zA-ZÀ-ÖØ-öø-ÿąĄćĆęĘłŁńŃóÓśŚżŻźŹ\\s\\-]{2,100}$",
-        "message" : "Miasto musi zawierać od 2 do 100 znaków i nie może zawierać cyfr ani znaków specjalnych."
+        "message" : "city_message_regex"
     },
     "country" : {
         "regex" : "/^[a-zA-ZÀ-ž\\s\\-]{2,60}$/",
-        "message" : "Dopuszczalna ilość znaków 60 i nie może zawierać cyfr ani znaków specjalnych."
+        "message" : "country_message_regex"
     },
     "post_code" : {
         "regex" : "^\\d{2}-\\d{3}$|^\\d{5}$|^\\d{4}$|^\\d{4}\\s?[A-Za-z]{2}$|^[A-Za-z]{1,2}\\d{1,2}\\s?\\d[A-Za-z]{2}$",
-        "message" : "Kod pocztowy musi być w poprawnym formacie."
+        "message" : "post_code_message_regex"
     },
     "subject" : {
         "regex" : "^.{2,50}$",
-        "message" : "Dopuszczalna ilość znaków 50."
+        "message" : "subject_message_regex"
     },
     "message" : {
         "regex" : "/^.{3,500}$/",
-        "message" : "Dopuszczalna ilość znaków 500."
+        "message" : "message_message_regex"
     },
     "courier_announcement_name" : {
         "regex" : "/^.{2,100}$/",
-        "message" : "Dopuszczalna ilość znaków 100."
+        "message" : "courier_announcement_name_message_regex"
     }
 }

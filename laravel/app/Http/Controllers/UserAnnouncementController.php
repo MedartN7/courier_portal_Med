@@ -191,7 +191,7 @@ class UserAnnouncementController extends Controller
         $experience_max_date = $today->modify('+30 days');
         $experience_max_date_string = $experience_max_date->format('Y-m-d');
         $validator = Validator::make($data, [
-            'phone_number' =>                             [ 'required', 'min:10', 'max:16' ],
+            'phone_number' =>                             [ 'required', 'min:9', 'max:16' ],
             'email' =>                                    [ 'required', 'email', 'max:255' ],
             'expect_sending_date' =>                      [ 'required', 'max:255', 'after:' . date('Y-m-d', strtotime('-1 day')) ],
             'experience_date' =>                          [ 'required', 'max:255', 'before:' . $experience_max_date_string ],
@@ -275,6 +275,7 @@ class UserAnnouncementController extends Controller
 
         if ($validator->fails() || $directionValidator->fails() || $isZeroItems || $allDirectionData === false ) {
             //dd( $validator, $directionValidator );
+            dd( $validator, $directionValidator );
             return redirect()
                 ->back()
                 ->withErrors( $validator )
